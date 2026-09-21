@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://armintahsiri.github.io/sitemap.xml

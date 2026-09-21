@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">آرمین تحسیری | توسعه وب و سیستم‌های هوشمند</title>
+  <desc id="desc">وب‌سایت‌های سریع و ابزارهای هوشمند برای کسب‌وکار</desc>
+  <rect width="1200" height="630" fill="#f7f6f3"/>
+  <circle cx="1020" cy="70" r="230" fill="#1e3a5f" opacity=".08"/>
+  <path d="M0 560H1200" stroke="#dedcd5" stroke-width="2"/>
+  <text x="1050" y="115" fill="#c1272d" font-family="Arial, sans-serif" font-size="25" font-weight="700" text-anchor="end">توسعه وب و سیستم‌های هوشمند</text>
+  <text x="1050" y="280" fill="#16171a" font-family="Arial, sans-serif" font-size="74" font-weight="800" text-anchor="end">وب‌سایت‌های سریع</text>
+  <text x="1050" y="370" fill="#16171a" font-family="Arial, sans-serif" font-size="58" font-weight="800" text-anchor="end">و ابزارهای هوشمند</text>
+  <text x="1050" y="440" fill="#5b5d63" font-family="Arial, sans-serif" font-size="30" font-weight="500" text-anchor="end">برای کسب‌وکار</text>
+  <text x="90" y="555" fill="#16171a" font-family="Arial, sans-serif" font-size="30" font-weight="800">آرمین تحسیری</text>
+</svg>
