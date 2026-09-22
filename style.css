@@ -77,8 +77,6 @@
   .hero-media{width:min(100%,440px)}
 }
 
-@media (max-width:800px){.hero-media{display:none}}
-
 /* Contact links use one LTR row direction with a consistent visual icon. */
 .contact-links{direction:ltr}
 .contact-social,.contact-links .contact-email,.contact-links .contact-github{justify-content:flex-start;gap:12px;direction:ltr}
@@ -93,12 +91,15 @@
 .contact-links .contact-github::before{content:'';background:url('assets/github.svg') center / contain no-repeat;border:0}
 .contact-links a span{font-size:1.05rem;direction:ltr}
 
-/* Three.js hero cube: transparent canvas with an SVG fallback in the same portrait slot. */
-.hero-network{position:relative;display:block;align-self:center;justify-self:center;width:min(100%,440px);max-width:100%;min-width:0;min-height:0;aspect-ratio:4 / 5;overflow:hidden!important;contain:layout paint;border-radius:24px;background:transparent!important;box-shadow:none!important}
-.hero-network canvas,.hero-network-fallback{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:100%;max-height:100%}
-.hero-network canvas{z-index:1;opacity:0;transition:opacity .35s ease}
-.hero-network.is-ready canvas{opacity:1}
-.hero-network-fallback{z-index:0;padding:8%;opacity:1;transition:opacity .35s ease,visibility .35s ease}
-.hero-network.is-ready .hero-network-fallback{visibility:hidden;opacity:0}
-@media (max-width:800px){.hero-network{display:block!important;justify-self:center;width:min(100%,250px);margin-top:12px;border-radius:20px}}
-@media (prefers-reduced-motion:reduce){.hero-network canvas,.hero-network-fallback{transition:none}}
+/* Lightweight code-to-chat hero visual in the same 4:5 hero slot. */
+.hero-code-visual{position:relative;display:block;align-self:center;justify-self:center;width:min(100%,440px);max-width:100%;min-width:0;aspect-ratio:4 / 5;overflow:hidden;border:1px solid var(--border);border-radius:24px;background:rgba(255,255,255,.56);box-shadow:0 18px 42px rgba(22,23,26,.08)}
+.code-window{display:flex;height:100%;flex-direction:column;color:var(--ink);font-family:ui-monospace,"SF Mono","Cascadia Code",Consolas,monospace;font-size:clamp(.62rem,1.05vw,.76rem);text-align:left}
+.code-window-bar{display:flex;align-items:center;gap:10px;min-height:45px;padding:0 17px;border-bottom:1px solid var(--border);background:rgba(247,246,243,.78);font-size:.68rem}
+.window-dots{display:flex;gap:5px}.window-dots i{display:block;width:7px;height:7px;border:1px solid rgba(22,23,26,.16);border-radius:50%;background:#d5d3cd}.window-dots i:nth-child(2){background:#cbc9c2}.window-dots i:nth-child(3){background:#e1dfd9}.window-file{color:var(--muted)}.window-state{margin-left:auto;color:#a7a49b;font-size:.62rem}
+.code-window-body{position:relative;min-height:0;flex:1;padding:clamp(20px,4vw,38px) clamp(15px,3.2vw,31px);overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.6),rgba(247,246,243,.74))}
+.code-stage,.chat-stage{position:absolute;inset:clamp(20px,4vw,38px) clamp(15px,3.2vw,31px);transition:opacity .35s ease,transform .35s ease}.chat-stage{opacity:0;transform:translateY(10px);direction:rtl;text-align:right;pointer-events:none}.hero-code-visual.is-chat .code-stage{opacity:0;transform:translateY(-10px);pointer-events:none}.hero-code-visual.is-chat .chat-stage{opacity:1;transform:none;pointer-events:auto}
+.code-block{position:relative;min-height:230px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;color:#33353a}.code-block code{display:inline}.syntax-keyword{color:var(--accent);font-weight:700}.syntax-string{color:#657f69}.syntax-comment{color:#a3a29b}.typing-cursor{display:inline-block;width:.5em;height:1.15em;margin-left:2px;vertical-align:-.16em;background:var(--accent);animation:hero-cursor .9s steps(1) infinite}.run-status{display:flex;align-items:center;gap:7px;margin-top:18px;color:#96938b;font-size:.66rem;opacity:0;transition:opacity .25s ease}.run-status span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:hero-pulse 1s ease-in-out infinite}.hero-code-visual.is-running .run-status{opacity:1}
+.chat-message{max-width:92%;padding:10px 12px;border:1px solid var(--border);border-radius:13px;box-shadow:0 5px 16px rgba(22,23,26,.035);font-family:var(--font);font-size:clamp(.71rem,1.2vw,.83rem);line-height:1.75}.chat-message p{margin:3px 0 0}.chat-user{margin:0 0 17px 0;background:rgba(193,39,45,.06);border-color:rgba(193,39,45,.16)}.chat-assistant{position:relative;margin-right:auto;background:rgba(255,255,255,.8)}.chat-label{display:block;color:var(--accent);font-size:.62rem;font-weight:700}.chat-typing{display:flex;gap:4px;align-items:center;width:max-content;margin:0 auto 17px 0;padding:9px 11px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.7)}.chat-typing span{width:4px;height:4px;border-radius:50%;background:#aaa79f;animation:hero-pulse 1s ease-in-out infinite}.chat-typing span:nth-child(2){animation-delay:.14s}.chat-typing span:nth-child(3){animation-delay:.28s}.hero-code-visual:not(.is-chat) .chat-stage{visibility:hidden}.chat-stage.is-answering .chat-typing{display:none}.chat-stage.is-answering .chat-assistant .typing-cursor{display:inline-block}
+@keyframes hero-cursor{50%{opacity:0}}@keyframes hero-pulse{50%{opacity:.35;transform:scale(.75)}}
+@media (max-width:800px){.hero-code-visual{display:block;justify-self:center;width:min(100%,320px);margin-top:12px;border-radius:20px}.code-window-bar{min-height:40px;padding-inline:13px}.code-window-body{padding:22px 17px}.code-stage,.chat-stage{inset:22px 17px}.code-block{min-height:220px;font-size:.66rem}.chat-message{font-size:.76rem}}
+@media (prefers-reduced-motion:reduce){.hero-code-visual *{animation:none!important;transition:none!important}.hero-code-visual .code-stage{display:none}.hero-code-visual .chat-stage{position:static;opacity:1;transform:none;visibility:visible}.hero-code-visual .chat-typing{display:none}.hero-code-visual .chat-assistant .typing-cursor{display:none}}

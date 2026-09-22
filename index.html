@@ -62,22 +62,25 @@
         <p class="hero-lead">برای کسب‌وکارها و تیم‌های کوچک، وب‌سایت‌های <span class="tech" dir="ltr">responsive</span> و سازگار با <span class="tech" dir="ltr">SEO</span> می‌سازم و قابلیت‌های هوش مصنوعی مثل دستیارهای <span class="tech" dir="ltr">RAG</span> و اتوماسیون فرایندها را به محصول اضافه می‌کنم.</p>
         <div class="hero-actions"><a class="button button-primary" href="#projects">مشاهده پروژه‌ها <span>↙</span></a><a class="button button-secondary" href="#collab-modal" data-open-modal>برای همکاری پیام بدید <span>↙</span></a></div>
       </div>
-      <div class="hero-media hero-network" aria-label="مکعب وایرفریم سه‌بعدی نمادین برای ساخت سیستم‌های وب و هوش مصنوعی">
-        <canvas id="hero-network-canvas" aria-hidden="true"></canvas>
-        <svg class="hero-network-fallback" viewBox="0 0 420 520" role="img" aria-label="تصویر انتزاعی مکعب وایرفریم در حال ساخت">
-          <g fill="none" stroke="#292b2f" stroke-opacity=".72" stroke-width="1.8" stroke-linejoin="round">
-            <path d="M210 72 103 133 210 194 317 133Z"/>
-            <path d="M103 133v150l107 62 107-62V133"/>
-            <path d="M210 194v151"/>
-            <path d="M103 283 210 344 317 283"/>
-            <path d="M154 105 154 255 210 287 266 255 266 105" stroke-opacity=".38"/>
-          </g>
-          <g fill="none" stroke="#34363a" stroke-opacity=".42" stroke-width="1.4">
-            <path d="M177 62 284 122 284 177 177 117Z"/>
-            <path d="M228 210 325 155 325 255 228 310Z"/>
-          </g>
-          <path d="M245 204 325 158 325 258 245 304Z" fill="none" stroke="#c1272d" stroke-opacity=".82" stroke-width="2"/>
-        </svg>
+      <div class="hero-media hero-code-visual" data-hero-visual aria-hidden="true">
+        <div class="code-window" dir="ltr">
+          <div class="code-window-bar">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="window-file">assistant.py</span>
+            <span class="window-state" data-window-state>live</span>
+          </div>
+          <div class="code-window-body">
+            <div class="code-stage" data-code-stage>
+              <pre class="code-block"><code data-code-output></code><span class="typing-cursor" aria-hidden="true"></span></pre>
+              <div class="run-status" data-run-status><span></span> running</div>
+            </div>
+            <div class="chat-stage" data-chat-stage>
+              <div class="chat-message chat-user"><span class="chat-label">شما</span><p>چطور پشتیبانی مشتری‌ها را سریع‌تر کنم؟</p></div>
+              <div class="chat-typing" data-chat-typing><span></span><span></span><span></span></div>
+              <div class="chat-message chat-assistant"><span class="chat-label">دستیار هوشمند</span><p data-chat-output></p><span class="typing-cursor" aria-hidden="true"></span></div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -145,7 +148,6 @@
       </form>
     </section>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="script.js?v=6"></script>
 </body>
 </html>
