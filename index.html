@@ -62,7 +62,23 @@
         <p class="hero-lead">برای کسب‌وکارها و تیم‌های کوچک، وب‌سایت‌های <span class="tech" dir="ltr">responsive</span> و سازگار با <span class="tech" dir="ltr">SEO</span> می‌سازم و قابلیت‌های هوش مصنوعی مثل دستیارهای <span class="tech" dir="ltr">RAG</span> و اتوماسیون فرایندها را به محصول اضافه می‌کنم.</p>
         <div class="hero-actions"><a class="button button-primary" href="#projects">مشاهده پروژه‌ها <span>↙</span></a><a class="button button-secondary" href="#collab-modal" data-open-modal>برای همکاری پیام بدید <span>↙</span></a></div>
       </div>
-      <div class="hero-media"><img src="assets/armin-tahsiri-portrait.png" alt="پرتره‌ی آرمین تحسیری" width="1122" height="1402" fetchpriority="high"></div>
+      <div class="hero-media hero-network" aria-label="مکعب وایرفریم سه‌بعدی نمادین برای ساخت سیستم‌های وب و هوش مصنوعی">
+        <canvas id="hero-network-canvas" aria-hidden="true"></canvas>
+        <svg class="hero-network-fallback" viewBox="0 0 420 520" role="img" aria-label="تصویر انتزاعی مکعب وایرفریم در حال ساخت">
+          <g fill="none" stroke="#292b2f" stroke-opacity=".72" stroke-width="1.8" stroke-linejoin="round">
+            <path d="M210 72 103 133 210 194 317 133Z"/>
+            <path d="M103 133v150l107 62 107-62V133"/>
+            <path d="M210 194v151"/>
+            <path d="M103 283 210 344 317 283"/>
+            <path d="M154 105 154 255 210 287 266 255 266 105" stroke-opacity=".38"/>
+          </g>
+          <g fill="none" stroke="#34363a" stroke-opacity=".42" stroke-width="1.4">
+            <path d="M177 62 284 122 284 177 177 117Z"/>
+            <path d="M228 210 325 155 325 255 228 310Z"/>
+          </g>
+          <path d="M245 204 325 158 325 258 245 304Z" fill="none" stroke="#c1272d" stroke-opacity=".82" stroke-width="2"/>
+        </svg>
+      </div>
     </section>
 
     <section class="editorial-section section-wrap" id="about" aria-labelledby="about-title">
@@ -129,6 +145,7 @@
       </form>
     </section>
   </div>
-  <script src="script.js?v=5"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>

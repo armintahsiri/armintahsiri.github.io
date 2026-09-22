@@ -9,6 +9,217 @@ const CONFIG = {
   formAccessKey: '7af2702d-dce8-4820-bfbb-a8392bb61fe4'
 };
 
+const initHeroCube = () => {
+  const container = document.querySelector('.hero-network');
+  const canvas = document.getElementById('hero-network-canvas');
+  if (!container || !canvas) return;
+  if (!window.THREE || !window.WebGLRenderingContext) {
+    canvas.hidden = true;
+    return;
+  }
+
+  const THREE = window.THREE;
+  let renderer;
+  const showFallback = () => {
+    canvas.hidden = true;
+    container.classList.remove('is-ready');
+  };
+
+  try {
+    renderer = new THREE.WebGLRenderer({canvas, alpha: true, antialias: true, powerPreference: 'low-power'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0xf7f6f3, 4.8, 9.2);
+    const camera = new THREE.PerspectiveCamera(36, 1, .1, 20);
+    camera.position.set(0, 0, 6.4);
+    const assembly = new THREE.Group();
+    scene.add(assembly);
+
+    const primaryMaterial = new THREE.LineBasicMaterial({color: 0x16171a, transparent: true, opacity: .9, linewidth: 2});
+    const secondaryMaterial = new THREE.LineBasicMaterial({color: 0x4a4c51, transparent: true, opacity: .34, linewidth: 1});
+    const accentMaterial = new THREE.LineBasicMaterial({color: 0xc1272d, transparent: true, opacity: .68, linewidth: 1});
+    const wireframes = [];
+    const addWireframe = (geometry, material, position, rotation, drawDelay = 0) => {
+      const edgeGeometry = new THREE.EdgesGeometry(geometry);
+      const object = new THREE.LineSegments(edgeGeometry, material);
+      object.position.copy(position);
+      object.rotation.copy(rotation);
+      object.renderOrder = 2;
+      assembly.add(object);
+      wireframes.push({geometry: edgeGeometry, total: edgeGeometry.getAttribute('position').count, delay: drawDelay});
+      return object;
+    };
+
+    const mainCube = addWireframe(new THREE.BoxGeometry(1.46, 1.46, 1.46), primaryMaterial, new THREE.Vector3(0, 0, 0), new THREE.Euler(), 0);
+    const weightMaterial = new THREE.LineBasicMaterial({color: 0x16171a, transparent: true, opacity: .18, linewidth: 3});
+    const weightLayer = new THREE.LineSegments(mainCube.geometry, weightMaterial);
+    weightLayer.scale.setScalar(1.006);
+    weightLayer.renderOrder = 1;
+    assembly.add(weightLayer);
+
+    const addPanel = (geometry, lineMaterial, position, rotation, drawDelay, fillMaterial) => {
+      if (fillMaterial) {
+        const fill = new THREE.Mesh(geometry, fillMaterial);
+        fill.position.copy(position);
+        fill.rotation.copy(rotation);
+        fill.renderOrder = 1;
+        assembly.add(fill);
+      }
+      addWireframe(geometry, lineMaterial, position, rotation, drawDelay);
+    };
+    const accentFill = new THREE.MeshBasicMaterial({color: 0xc1272d, transparent: true, opacity: .14, side: THREE.DoubleSide, depthWrite: false});
+    addPanel(new THREE.PlaneGeometry(1.08, 1.08), secondaryMaterial, new THREE.Vector3(.08, .06, .86), new THREE.Euler(0, 0, 0), .12);
+    addPanel(new THREE.PlaneGeometry(1.08, 1.08), accentMaterial, new THREE.Vector3(.9, .1, .08), new THREE.Euler(0, Math.PI / 2, 0), .24, accentFill);
+    addPanel(new THREE.PlaneGeometry(1.08, 1.08), secondaryMaterial, new THREE.Vector3(.1, .9, -.08), new THREE.Euler(-Math.PI / 2, 0, 0), .36);
+
+    const createGlowTexture = () => {
+      const glowCanvas = document.createElement('canvas');
+      glowCanvas.width = 64;
+      glowCanvas.height = 64;
+      const context = glowCanvas.getContext('2d');
+      const gradient = context.createRadialGradient(32, 32, 1, 32, 32, 32);
+      gradient.addColorStop(0, 'rgba(255,255,255,.95)');
+      gradient.addColorStop(.18, 'rgba(255,255,255,.65)');
+      gradient.addColorStop(.55, 'rgba(255,255,255,.16)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(glowCanvas);
+    };
+    const glowTexture = createGlowTexture();
+    const neutralGlow = new THREE.SpriteMaterial({map: glowTexture, color: 0xd3d1ca, transparent: true, opacity: .68, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false});
+    const accentGlow = new THREE.SpriteMaterial({map: glowTexture, color: 0xc1272d, transparent: true, opacity: .72, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false});
+    const addVertexMarkers = (size, position, rotation, material, spriteSize) => {
+      [-1, 1].forEach(x => [-1, 1].forEach(y => {
+        const local = new THREE.Vector3(x * size / 2, y * size / 2, 0).applyEuler(rotation).add(position);
+        const sprite = new THREE.Sprite(material);
+        sprite.position.copy(local);
+        sprite.scale.set(spriteSize, spriteSize, 1);
+        sprite.renderOrder = 3;
+        assembly.add(sprite);
+      }));
+    };
+    const addCubeVertexMarkers = () => {
+      const half = .73;
+      [-1, 1].forEach(x => [-1, 1].forEach(y => [-1, 1].forEach(z => {
+        const sprite = new THREE.Sprite(neutralGlow);
+        sprite.position.set(x * half, y * half, z * half);
+        sprite.scale.set(.105, .105, 1);
+        sprite.renderOrder = 3;
+        assembly.add(sprite);
+      })));
+    };
+    addCubeVertexMarkers();
+    addVertexMarkers(1.08, new THREE.Vector3(.08, .06, .86), new THREE.Euler(0, 0, 0), neutralGlow, .075);
+    addVertexMarkers(1.08, new THREE.Vector3(.9, .1, .08), new THREE.Euler(0, Math.PI / 2, 0), accentGlow, .08);
+    addVertexMarkers(1.08, new THREE.Vector3(.1, .9, -.08), new THREE.Euler(-Math.PI / 2, 0, 0), neutralGlow, .075);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isSmallScreen = window.matchMedia('(max-width: 767px)').matches;
+    const staticMode = reducedMotion || isSmallScreen;
+    let visible = true;
+    let frame = 0;
+    let lastTime = performance.now();
+    const introDuration = 1900;
+    let introStarted = staticMode;
+    let introComplete = staticMode;
+    let introStartTime = 0;
+    let rotationY = -.42;
+    let rotationX = .34;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    const setDrawProgress = progress => {
+      wireframes.forEach(({geometry, total, delay}) => {
+        const localProgress = Math.max(0, Math.min(1, (progress - delay) / (1 - delay)));
+        const segmentCount = Math.floor((total * localProgress) / 2) * 2;
+        geometry.setDrawRange(0, segmentCount);
+      });
+    };
+    setDrawProgress(staticMode ? 1 : 0);
+
+    const render = () => {
+      assembly.rotation.y = rotationY + pointerX * .065;
+      assembly.rotation.x = rotationX + pointerY * .05;
+      renderer.render(scene, camera);
+    };
+    const resize = () => {
+      const width = Math.max(1, container.clientWidth || 440);
+      const height = Math.max(1, container.clientHeight || 550);
+      renderer.setSize(width, height, false);
+      renderer.domElement.style.width = '100%';
+      renderer.domElement.style.height = '100%';
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      render();
+    };
+    const startIntro = () => {
+      if (staticMode || introStarted) return;
+      introStarted = true;
+      introStartTime = performance.now();
+      setDrawProgress(0);
+    };
+    const animate = now => {
+      frame = 0;
+      if (!visible || staticMode) return;
+      const delta = Math.min((now - lastTime) / 1000, .08);
+      lastTime = now;
+      if (!introComplete) {
+        const introProgress = Math.min(1, (now - introStartTime) / introDuration);
+        const easedProgress = 1 - Math.pow(1 - introProgress, 3);
+        setDrawProgress(easedProgress);
+        if (introProgress >= 1) introComplete = true;
+      } else {
+        rotationY += delta * (Math.PI * 2 / 78);
+        rotationX += delta * (Math.PI * 2 / 88);
+      }
+      render();
+      frame = window.requestAnimationFrame(animate);
+    };
+    const start = () => {
+      if (!staticMode && visible && !frame) {
+        lastTime = performance.now();
+        frame = window.requestAnimationFrame(animate);
+      }
+    };
+    const stop = () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = 0;
+    };
+
+    if (!staticMode) {
+      container.addEventListener('pointermove', event => {
+        const bounds = container.getBoundingClientRect();
+        pointerX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
+        pointerY = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
+      }, {passive: true});
+      container.addEventListener('pointerleave', () => { pointerX = 0; pointerY = 0; }, {passive: true});
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries => {
+        visible = entries[0].isIntersecting;
+        if (visible) {
+          startIntro();
+          start();
+        }
+        else stop();
+      }, {threshold: 0}).observe(container);
+    }
+    window.addEventListener('resize', resize, {passive: true});
+    container.classList.add('is-ready');
+    resize();
+    if (!staticMode) {
+      startIntro();
+      start();
+    }
+  } catch {
+    showFallback();
+  }
+};
+
 const initPortfolio = () => {
   const header = document.getElementById('site-header');
   const nav = document.getElementById('site-nav');
@@ -182,6 +393,7 @@ const initPortfolio = () => {
   if (year) year.textContent = new Date().getFullYear();
   renderConfigLinks();
   renderProjectLinks();
+  initHeroCube();
 };
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPortfolio, {once: true});
